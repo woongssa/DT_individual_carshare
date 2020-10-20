@@ -325,11 +325,10 @@ http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확�
 
 order에 대해 repository를 구성하였고, CI/CD플랫폼은 AWS의 CodeBuild를 사용했다.
 pipeline build script는 order의 buildspec.yml 에 포함되어있다.
-
+![image](https://user-images.githubusercontent.com/70302900/96588525-b87bcd80-131e-11eb-90c8-8c4d1c4c1078.png)
 
 Git Hook 설정으로 연결된 GitHub의 소스 변경 발생 시 자동 배포된다.
-
-
+![image](https://user-images.githubusercontent.com/70302900/96588864-19a3a100-131f-11eb-8b72-846538a6ae42.png)
 
 
 #동기식 호출 / 서킷 브레이킹 / 장애격리
@@ -342,22 +341,27 @@ istio-injection 적용 (기 적용완료)
 kubectl label namespace carshare istio-injection=enabled 
 
 서킷 브레이커 pending time 설정
+![image](https://user-images.githubusercontent.com/70302900/96588904-27592680-131f-11eb-94dc-2b61b67c3ce2.png)
 
 
 
 
 부하테스트 툴(Siege) 설치 및 Order 서비스 Load Testing 
 동시 사용자 5명, 2초 실행 
+![image](https://user-images.githubusercontent.com/70302900/96588949-38099c80-131f-11eb-9e37-5f1846fca268.png)
 
 
 키알리(kiali)화면에 서킷브레이커 동작 확인
-
+![image](https://user-images.githubusercontent.com/70302900/96589002-46f04f00-131f-11eb-92b7-dd13ce203382.png)
 
 Destinationrule을 제거 후 동일 부하 조건으로 정상 처리 확인
 
 kubectl delete -f dr-order.yaml
 
 
+
+접속키: AKIAXHDEFLPI62W2L4KJ
+비밀접속키: ZOQdKCzoYSPOammknuQ7XHOd+ztDayfV8aNmbvG5
 
 
 
