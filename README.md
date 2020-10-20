@@ -153,22 +153,22 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: ScreeningManage
-          uri: http://ScreeningManage:8080
+        - id: order
+          uri: http://carshareorder:8080
           predicates:
-            - Path=/screenings/**
-        - id: HospitalManage
-          uri: http://HospitalManage:8080
+            - Path=/orders/** 
+        - id: delivery
+          uri: http://carsharedelivery:8080
           predicates:
-            - Path=/hospitals/** 
-        - id: ReservationManage
-          uri: http://ReservationManage:8080
+            - Path=/deliveries/**,/cancellations/**
+        - id: statusview
+          uri: http://carsharestatusview:8080
           predicates:
-            - Path=/reservations/** 
-        - id: MyPage
-          uri: http://MyPage:8080
+            - Path= /customerpages/**
+        - id: payment
+          uri: http://carsharepayment:8080
           predicates:
-            - Path= /myPages/**
+            - Path=/payments/**,/paymentCancellations/**
 ```
 
 
@@ -196,18 +196,58 @@ pom.xml 에 적용
 
 ## 동기식 호출 과 Fallback 처리
 
-분석단계에서의 조건 중 하나로 고객검진요청(Screening)->병원정보관리(Hospital) 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 
-고객검진요청 > 병원정보관리 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리
+분석단계에서의 조건 중 하나로 접수(order)->결제(payment) 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다.
 - FeignClient 서비스 구현
 
 ```
-# HospitalService.java
+# PaymentService.java
 
-@FeignClient(name="HospitalManage", url="${api.hospital.url}")
-public interface HospitalService {
+@FeignClient(name="payment", contextId ="payment", url="${api.payment.url}", fallback = PaymentServiceFallback.class)
+public interface PaymentService {
 
-    @RequestMapping(method= RequestMethod.PUT, value="/hospitals/{hospitalId}", consumes = "application/json")
-    public void screeningRequest(@PathVariable("hospitalId") Long hospitalId, @RequestBody Hospital hospital);
+    @RequestMapping(method= RequestMethod.POST, path="/payments")
+    public void pay(@RequestBody Payment payment);
 
 }
 ```
+- 접수요청을 받은 직후(@PostPersist) 결제를 요청하도록 처리
+```
+# Order.java (Entity)
+
+    @PostPersist
+    public void onPostPersist(){
+        Ordered ordered = new Ordered();
+        BeanUtils.copyProperties(this, ordered);
+        ordered.publishAfterCommit();
+
+        carshare.external.Payment payment = new carshare.external.Payment();
+        payment.setOrderId(this.getId());
+        payment.setProductId(this.getProductId());
+        payment.setQty(this.getQty());
+        payment.setStatus("OrderApproved");
+        OrderApplication.applicationContext.getBean(carshare.external.PaymentService.class)
+            .pay(payment);
+    }
+```
+
+- 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하며, 결제 서비스가 장애가 나면 접수요청 못받는다는 것을 확인
+
+
+```
+#결제(Payment) 서비스를 잠시 내려놓음 (ctrl+c)
+
+#접수요청 처리 실패
+http localhost:8081/orders productId=1001 qty=1 status="order"   #Fail
+http localhost:8081/orders productId=1002 qty=3 status="order"   #Fail
+
+#결제 서비스 재기동
+cd carsharepayment
+mvn spring-boot:run
+
+#접수요청 처리 성공
+http localhost:8081/orders productId=1001 qty=1 status="order"   #Success
+http localhost:8081/orders productId=1002 qty=3 status="order"   #Success
+```
+
+- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, Fallback 처리는 운영단계에서 설명한다.)
+
