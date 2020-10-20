@@ -1,10 +1,13 @@
-# DT_6th_team5_carShare
+# DT_6th_team5_carShare (자동차 공유 서비스)
 
-# waterDispenserRental (정수기 렌탈 서비스)
-
-5팀 정수기 렌탈 서비스 CNA개발 실습을 위한 프로젝트
+5팀 자동차 공유 서비스 CNA개발 실습을 위한 프로젝트
 
 # 구현 Repository
+ 1. 접수관리 : https://github.com/YoungDukGe1000Won/carShareOrder.git
+ 1. 결제관리 : https://github.com/YoungDukGe1000Won/carSharePayment.git
+ 1. 배송관리 : https://github.com/YoungDukGe1000Won/carShareDelivery.git
+ 1. 고객페이지 : https://github.com/YoungDukGe1000Won/carShareStatusview.git
+ 1. 게이트웨이 : https://github.com/byounghoonmoon/carShareGateway.git
 
 
 # Table of contents
@@ -57,30 +60,7 @@
 
 ### 이벤트스토밍
 * MSAEz 로 모델링한 이벤트스토밍 결과:  
-
-===========
-
-### 이벤트 도출 
-![image](https://user-images.githubusercontent.com/47113630/96410136-64d78a00-1221-11eb-9ca0-723dd9171c81.png)
-
-### 커맨드, 액터 도출 및 이벤트명 보완 
-![image](https://user-images.githubusercontent.com/47113630/96410990-bfbdb100-1222-11eb-92c0-3590f78b7ea9.png)
-* 연결된 이벤트는 Policy도 같이 도출함
-
-### 어그리게잇 및 바운디드 컨텍스트 적용 
-![image](https://user-images.githubusercontent.com/47113630/96412237-c64d2800-1224-11eb-945c-441b6aaba254.png)
-
-### 컨텍스트 매핑 및 추가 도출 Policy 사항 적용
-![image](https://user-images.githubusercontent.com/47113630/96413447-9d2d9700-1226-11eb-802c-9c785b1cfbe8.png)
-* 폴리시의 이동과 컨텍스트 매핑
-
-### 사용자 커맨드를 위한 정보 View 추가
-![image](https://user-images.githubusercontent.com/47113630/96414047-89366500-1227-11eb-9864-4ac69a205e2f.png)
-
-=============
-
-### 이벤트 스토밍 결과  
-![캡처](https://user-images.githubusercontent.com/42608068/96403044-55047980-1212-11eb-9d7c-84bc82ab7ecd.PNG)
+![제목 없음](https://user-images.githubusercontent.com/42608068/96534281-5abd9600-12ca-11eb-88b9-37c11705aae0.png)
 
 ### 이벤트 도출 
 ![제목 없음1](https://user-images.githubusercontent.com/42608068/96401757-3650b380-120f-11eb-87dc-764e34ae453c.png)
