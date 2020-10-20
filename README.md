@@ -106,7 +106,7 @@
     - 고객이 자신의 렌탈 정보를 조회한다 (ok)
     
 ### 완성본에 대한 비기능적 요구사항을 커버하는지 검증
-![image](https://user-images.githubusercontent.com/487999/79684184-5c9a9400-826a-11ea-8d87-2ed1e44f4562.png)
+![제목없음22](https://user-images.githubusercontent.com/42608068/96582783-c2013780-1316-11eb-8bfc-dba64c7af837.png)
 
     1. 트랜잭션
     - 고객의 주문에 따라 결제가 진행된다(결제가 정상적으로 완료되지 않으면 주문이 되지 않는다) > Sync
