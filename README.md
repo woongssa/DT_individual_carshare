@@ -60,33 +60,33 @@
 
 ### 이벤트스토밍
 * MSAEz 로 모델링한 이벤트스토밍 결과:  
-![제목 없음](https://user-images.githubusercontent.com/42608068/96534281-5abd9600-12ca-11eb-88b9-37c11705aae0.png)
+![image](https://user-images.githubusercontent.com/42608068/96539757-c9085580-12d6-11eb-8721-8bb7e0601d53.png)
 
 ### 이벤트 도출 
-![제목 없음1](https://user-images.githubusercontent.com/42608068/96401757-3650b380-120f-11eb-87dc-764e34ae453c.png)
+![제목 없음1](https://user-images.githubusercontent.com/42608068/96541160-60bb7300-12da-11eb-8eda-4beb637fa24f.png)
 
 ### 부적격 이벤트 탈락
-![제목 없음](https://user-images.githubusercontent.com/42608068/96401697-0e615000-120f-11eb-982d-2b57c7e2d692.png)
+![제목 없음2](https://user-images.githubusercontent.com/42608068/96541195-6fa22580-12da-11eb-94c0-9efb0947e5aa.png)
 
 ### 액터, 커맨드 부착하여 읽기 좋게
-![제목 없음2](https://user-images.githubusercontent.com/42608068/96401865-7ca61280-120f-11eb-83d6-cb0f2970cb37.png)
+![제목 없음3](https://user-images.githubusercontent.com/42608068/96541203-77fa6080-12da-11eb-8a8a-50a018a72961.png)
 
 ### 어그리게잇으로 묶기
 ![제목 없음3](https://user-images.githubusercontent.com/42608068/96402579-423d7500-1211-11eb-9784-c1f7e1c4b2fb.png)
 
 ### 바운디드 컨텍스트로 묶기
-![제목 없음4](https://user-images.githubusercontent.com/42608068/96402789-b9730900-1211-11eb-84a1-43062ff258fe.png)
+![제목 없음4](https://user-images.githubusercontent.com/42608068/96541221-86487c80-12da-11eb-96c9-705fd7957d01.png)
 
 ### 도메인분리
-
+![제목 없음5](https://user-images.githubusercontent.com/42608068/96541235-919ba800-12da-11eb-8c49-84655f2ca88e.png)
 
 ### 폴리시 부착 
-
+![제목 없음6](https://user-images.githubusercontent.com/42608068/96541251-99f3e300-12da-11eb-99f9-8a9027a7b855.png)
 
 ### 폴리시의 이동과 컨텍스트 매핑 (점선은 Pub/Sub, 실선은 Req/Resp)
-
+![제목 없음7](https://user-images.githubusercontent.com/42608068/96541279-a11af100-12da-11eb-9d0d-3cf209f7216b.png)
 
 ### 완성된 모형
-
+![제목 없음8](https://user-images.githubusercontent.com/42608068/96541544-36b68080-12db-11eb-8969-ae11fbdbe208.png)
 
 ### 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
