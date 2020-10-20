@@ -234,9 +234,9 @@ public interface PaymentService {
 
 
 ```
-#결제(Payment) 서비스를 잠시 내려놓음 (ctrl+c)
+#결제(payment) 서비스를 잠시 내려놓음 (ctrl+c)
 
-#접수요청 처리 실패
+#접수요청 처리
 http localhost:8081/orders productId=1001 qty=1 status="order"   #Fail
 http localhost:8081/orders productId=1002 qty=3 status="order"   #Fail
 
@@ -301,22 +301,22 @@ public class PolicyHandler{
 
 ```
 
-예약관리 시스템은 병원/검진신청과 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 예약관리시스템이 유지보수로 인해 잠시 내려간 상태라도 예약신청을 받는데 문제가 없다.
+배송 서비스는 접수/결제 서비스와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 배송 서비스가 유지보수로 인해 잠시 내려간 상태라도 접수신청을 받는데 문제가 없다.
 
 ```
-#예약관리 서비스 (Reservation) 를 잠시 내려놓음 (ctrl+c)
+#배송(delivery) 서비스를 잠시 내려놓음 (ctrl+c)
 
-#검진신청취소처리
-http PUT localhost:8081/screenings hospitalId=1 hospitalNm="Samsung" chkDate= "20200907" custNm= "Moon44" status= "Canceled"   #Success
-http PUT localhost:8081/screenings hospitalId=2 hospitalNm="SK" chkDate= "20200908" custNm= "YOU" status= "Canceled"   #Success
+#접수요청 처리
+http localhost:8081/orders productId=1003 qty=2 status="order"   #Success
+http localhost:8081/orders productId=1004 qty=4 status="order"   #Success
 
-#예약관리상태 확인
-http localhost:8083/reservations     # 예약상태 안바뀜 확인
+#접수상태 확인
+http localhost:8081/orders     # 주문상태 안바뀜 확인
 
-#예약관리 서비스 기동
-cd ReservationManage
+#배송 서비스 기동
+cd carsharedelivery
 mvn spring-boot:run
 
-#예약관리상태 확인
-http localhost:8083/reservations     # 예약상태가 "취소됨"으로 확인
+#접수상태 확인
+http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확인
 ```
