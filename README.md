@@ -55,8 +55,7 @@
 
 
 ## TO-BE 조직 (Vertically-Aligned)
-![제목 없음23](https://user-images.githubusercontent.com/42608068/96586404-edd2ec00-131b-11eb-9996-eb312be000b5.png)
-
+![제목 없음23](https://user-images.githubusercontent.com/42608068/96586618-34284b00-131c-11eb-89b0-707eaa8eae82.png)
 
 
 ## 이벤트스토밍
