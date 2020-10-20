@@ -145,3 +145,69 @@
 | customerpage | 상태 조회 | 8083 | http://localhost:8083/customerpages | http://carsharestatusview:8080/customerpages |
 | payment | 결제 관리 | 8084 | http://localhost:8084/payments | http://carsharepayment:8080/payments |
 
+## Gateway 적용
+
+```
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: ScreeningManage
+          uri: http://ScreeningManage:8080
+          predicates:
+            - Path=/screenings/**
+        - id: HospitalManage
+          uri: http://HospitalManage:8080
+          predicates:
+            - Path=/hospitals/** 
+        - id: ReservationManage
+          uri: http://ReservationManage:8080
+          predicates:
+            - Path=/reservations/** 
+        - id: MyPage
+          uri: http://MyPage:8080
+          predicates:
+            - Path= /myPages/**
+```
+
+
+## 폴리글랏 퍼시스턴스
+
+CQRS 를 위한 Mypage 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
+
+```
+pom.xml 에 적용
+<!-- 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+ -->
+		<dependency>
+		    <groupId>org.hsqldb</groupId>
+		    <artifactId>hsqldb</artifactId>
+		    <version>2.4.0</version>
+		    <scope>runtime</scope>
+		</dependency>
+```
+
+
+## 동기식 호출 과 Fallback 처리
+
+분석단계에서의 조건 중 하나로 고객검진요청(Screening)->병원정보관리(Hospital) 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 
+고객검진요청 > 병원정보관리 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리
+- FeignClient 서비스 구현
+
+```
+# HospitalService.java
+
+@FeignClient(name="HospitalManage", url="${api.hospital.url}")
+public interface HospitalService {
+
+    @RequestMapping(method= RequestMethod.PUT, value="/hospitals/{hospitalId}", consumes = "application/json")
+    public void screeningRequest(@PathVariable("hospitalId") Long hospitalId, @RequestBody Hospital hospital);
+
+}
+```
