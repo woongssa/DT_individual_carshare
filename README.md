@@ -360,6 +360,14 @@ kubectl label namespace carshare istio-injection=enabled
 kubectl delete -f dr-order.yaml
 ```
 
+## Autoscale
+resource 설정 적용
+![image](https://user-images.githubusercontent.com/42608068/96592913-e44d8200-1323-11eb-8d94-386116ecaf2c.png)
 
+replica 를 동적으로 늘려주도록 HPA 를 설정
+![image](https://user-images.githubusercontent.com/42608068/96592628-8de04380-1323-11eb-8288-2288a9e189ec.png)
+![image](https://user-images.githubusercontent.com/42608068/96592446-5d000e80-1323-11eb-8eeb-0fd2e12fcd5f.png)
 
+## 무정지 재배포
+![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
 
