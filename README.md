@@ -366,7 +366,7 @@ kubectl delete -f dr-order.yaml
 - Deployment 배포시 resource 설정 적용
 ![image](https://user-images.githubusercontent.com/42608068/96592913-e44d8200-1323-11eb-8d94-386116ecaf2c.png)
 
-- replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다:
+- replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 5프로를 넘어서면 replica 를 10개까지 늘려준다:
 ![image](https://user-images.githubusercontent.com/42608068/96592628-8de04380-1323-11eb-8288-2288a9e189ec.png)
 - 오토스케일 적용 내용
 ![image](https://user-images.githubusercontent.com/42608068/96592446-5d000e80-1323-11eb-8eeb-0fd2e12fcd5f.png)
