@@ -251,3 +251,72 @@ http localhost:8081/orders productId=1002 qty=3 status="order"   #Success
 
 - 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, Fallback 처리는 운영단계에서 설명한다.)
 
+
+## 비동기식 호출 / 시간적 디커플링 / 장애격리 / 최종 (Eventual) 일관성 테스트
+
+결제가 이루어진 후에 배송 서비스로 이를 알려주는 행위는 동기식이 아니라 비동기식으로 처리하여 배송 시스템의 처리를 위해 결제가 블로킹되지 않도록 처리한다.
+ 
+- 이를 위하여 결제이력 기록을 남긴 후에 곧바로 결제승인이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
+ 
+```
+package carshare;
+
+@Entity
+@Table(name="Payment_table")
+public class Payment {
+
+ ...
+    @PostPersist
+    public void onPostPersist(){
+        Paid paid = new Paid();
+        BeanUtils.copyProperties(this, paid);
+        paid.publishAfterCommit();    
+    }
+}
+```
+- 배송 서비스에서는 결제승인 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다
+
+```
+package carshare;
+
+...
+
+@Service
+public class PolicyHandler{
+
+   @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverPaid_Ship(@Payload Paid paid){
+
+        if(paid.isMe()){
+            Delivery delivery = new Delivery();
+            delivery.setOrderId(paid.getOrderId());
+            delivery.setPaymentId(paid.getId());
+            delivery.setStatus("Shipped");
+
+            deliveryRepository.save(delivery) ;
+        }
+    }
+
+}
+
+```
+
+예약관리 시스템은 병원/검진신청과 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 예약관리시스템이 유지보수로 인해 잠시 내려간 상태라도 예약신청을 받는데 문제가 없다.
+
+```
+#예약관리 서비스 (Reservation) 를 잠시 내려놓음 (ctrl+c)
+
+#검진신청취소처리
+http PUT localhost:8081/screenings hospitalId=1 hospitalNm="Samsung" chkDate= "20200907" custNm= "Moon44" status= "Canceled"   #Success
+http PUT localhost:8081/screenings hospitalId=2 hospitalNm="SK" chkDate= "20200908" custNm= "YOU" status= "Canceled"   #Success
+
+#예약관리상태 확인
+http localhost:8083/reservations     # 예약상태 안바뀜 확인
+
+#예약관리 서비스 기동
+cd ReservationManage
+mvn spring-boot:run
+
+#예약관리상태 확인
+http localhost:8083/reservations     # 예약상태가 "취소됨"으로 확인
+```
