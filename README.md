@@ -75,10 +75,14 @@
 ![image](https://user-images.githubusercontent.com/42608068/96597010-4c05cc00-1328-11eb-8372-5241800cf7fe.png)
 
 ### 바운디드 컨텍스트로 묶기
-![제목 없음4](https://user-images.githubusercontent.com/42608068/96541221-86487c80-12da-11eb-96c9-705fd7957d01.png)
-
-### 도메인분리
 ![제목 없음5](https://user-images.githubusercontent.com/42608068/96541235-919ba800-12da-11eb-8c49-84655f2ca88e.png)
+
+```
+# 도메인 서열
+        - Core Domain:  접수 및 배송 관리 : 없어서는 안될 핵심 서비스이며, 연견 Up-time SLA 수준을 99.999% 목표, 배포주기는  1주일 1회 미만
+        - Supporting Domain:   접수 상태 페이지 : 경쟁력을 내기위한 서비스이며, SLA 수준은 연간 80% 이상 uptime 목표, 배포주기는 각 팀의 자율이나 표준 스프린트 주기가 1주일 이므로 1주일 1회 이상을 기준으로 함.
+        - General Domain:   결제 관리 : 결제서비스로 3rd Party 외부 서비스를 사용하는 것이 경쟁력이 높음 (핑크색으로 이후 전환할 예정)
+```
 
 ### 폴리시 부착 
 ![제목 없음6](https://user-images.githubusercontent.com/42608068/96541251-99f3e300-12da-11eb-99f9-8a9027a7b855.png)
