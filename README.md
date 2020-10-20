@@ -372,5 +372,6 @@ kubectl delete -f dr-order.yaml
 ![image](https://user-images.githubusercontent.com/42608068/96592446-5d000e80-1323-11eb-8eeb-0fd2e12fcd5f.png)
 
 ## 무정지 재배포
+Readiness Probe 설정  (buildspec.yml의 Readiness Probe 설정)
 ![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
 
