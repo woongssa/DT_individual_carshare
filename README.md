@@ -320,3 +320,45 @@ mvn spring-boot:run
 #접수상태 확인
 http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확인
 ```
+
+#CI/CD 설정
+
+order에 대해 repository를 구성하였고, CI/CD플랫폼은 AWS의 CodeBuild를 사용했다.
+pipeline build script는 order의 buildspec.yml 에 포함되어있다.
+
+
+Git Hook 설정으로 연결된 GitHub의 소스 변경 발생 시 자동 배포된다.
+
+
+
+
+#동기식 호출 / 서킷 브레이킹 / 장애격리
+
+
+서킷 브레이킹 istio-injection + DestinationRule
+
+istio-injection 적용 (기 적용완료)
+
+kubectl label namespace carshare istio-injection=enabled 
+
+서킷 브레이커 pending time 설정
+
+
+
+
+부하테스트 툴(Siege) 설치 및 Order 서비스 Load Testing 
+동시 사용자 5명, 2초 실행 
+
+
+키알리(kiali)화면에 서킷브레이커 동작 확인
+
+
+Destinationrule을 제거 후 동일 부하 조건으로 정상 처리 확인
+
+kubectl delete -f dr-order.yaml
+
+
+
+
+
+
