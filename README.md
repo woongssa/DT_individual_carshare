@@ -91,13 +91,16 @@
 
 ### 완성본에 대한 기능적 요구사항을 커버하는지 검증
 ![제목 없음12](https://user-images.githubusercontent.com/42608068/96543922-72077e00-12e0-11eb-91bf-ae6aaf5e8fbb.png)
+    
     - 고객이 공유차를 선택하여 렌탈한다 (ok)
     - 고객이 결제하여 접수한다 (ok)
     - 업체가 공유차를 고객위치로 가져다놓는다 (ok)
 
 ![제목 없음13](https://user-images.githubusercontent.com/42608068/96543936-79c72280-12e0-11eb-98a2-0c67478f6926.png)
+
     - 고객이 주문을 취소할 수 있다 (ok)
     - 렌탈이 취소되면 배송이 취소된다 (ok)
 
 ![제목 없음14](https://user-images.githubusercontent.com/42608068/96543997-9cf1d200-12e0-11eb-9a71-9aa743f7de44.png)
+   
     - 고객이 자신의 렌탈 정보를 조회한다 (ok)
