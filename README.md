@@ -58,7 +58,7 @@
 
 
 
-### 이벤트스토밍
+## 이벤트스토밍
 * MSAEz 로 모델링한 이벤트스토밍 결과:  
 ![image](https://user-images.githubusercontent.com/42608068/96539757-c9085580-12d6-11eb-8721-8bb7e0601d53.png)
 
@@ -117,7 +117,22 @@
     3. 성능
     - 고객은 본인의 상태 정보를 확인할 수 있다 > CQRS
 
-## 폴리글랏 퍼시스턴스
-CQRS 를 위한 statusview 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
-![제목없음20](https://user-images.githubusercontent.com/42608068/96547181-9cf4d080-12e6-11eb-8c7e-c4f3af990598.png)
+## 헥사고날 아키텍처 다이어그램 도출
+![제목없음21](https://user-images.githubusercontent.com/42608068/96549943-260e0680-12eb-11eb-8119-394cb324883d.png)
 
+    - Chris Richardson, MSA Patterns 참고하여 Inbound adaptor와 Outbound adaptor를 구분함
+    - 호출관계에서 PubSub 과 Req/Resp 를 구분함
+    - 서브 도메인과 바운디드 컨텍스트의 분리:  각 팀의 KPI 별로 아래와 같이 관심 구현 스토리를 나눠가짐
+
+   
+# 구현
+
+## 시나리오 테스트결과
+
+| 기능 | 이벤트 Payload |
+|---|:---:|
+| 1.관리자가 병원 정보( 병원이름, 예약일, 가능인원수)를 등록한다. |![image](https://user-images.githubusercontent.com/25805562/91837451-3577b880-ec87-11ea-88b1-dc4e9d74790d.png)|
+| 2.고객이 건강검진을 예약을 요청한다. </br>3.해당 병원의 검진가능 인원이 감소한다. (Sync)</br>4.예약 완료로 변경된다. (Async)</br>5.예약관리의 해당 내역의 상태가 등록된다. |![image](https://user-images.githubusercontent.com/25805562/91837806-7a035400-ec87-11ea-8966-09403bd5e7eb.png)|
+| 6.고객이 건강검진 예약을 취소한다.</br>7.취소 시, 병원의 검진가능 인원이 증가한다. (Async)</br>8.예약관리의 해당 내역의 상태가 예약 취소로 변경된다. | ![image](https://user-images.githubusercontent.com/25805562/91837990-c2227680-ec87-11ea-9fb1-530410922532.png) |
+| 9.관리자가 병원 정보를 삭제한다.</br>10.해당 병원에 예약한 예약자의 상태를 예약 강제 취소 변경한다. (Async)</br>11.예약관리의 해당 내역의 상태가 예약 강제 취소로 변경된다. | ![image](https://user-images.githubusercontent.com/25805562/91838119-f007bb00-ec87-11ea-9edd-38d9963f9ee0.png) | 
+| 12.건강검진 예약내역 상태를 조회한다.| ![image](https://user-images.githubusercontent.com/25805562/91838415-6ad0d600-ec88-11ea-9df8-1c6895fe6d75.png) |
