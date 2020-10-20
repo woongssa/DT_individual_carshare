@@ -347,8 +347,8 @@ kubectl label namespace carshare istio-injection=enabled
 
 
 * 부하테스트 툴(Siege) 설치 및 Order 서비스 Load Testing 
-- 동시 사용자 5명
-- 2초 실행 
+  - 동시 사용자 5명
+  - 2초 실행 
 ![image](https://user-images.githubusercontent.com/70302900/96588949-38099c80-131f-11eb-9e37-5f1846fca268.png)
 
 
