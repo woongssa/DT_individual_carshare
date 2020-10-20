@@ -383,3 +383,8 @@ kubectl delete -f dr-order.yaml
 
 
 ## ConfigMap 사용
+
+
+
+
+## liveness Probe 설정
