@@ -119,4 +119,5 @@
 
 ## 폴리글랏 퍼시스턴스
 CQRS 를 위한 statusview 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
-![79684772-eba9ab00-826e-11ea-9405-17e2bf39ec76](https://user-images.githubusercontent.com/42608068/96545440-58b40100-12e3-11eb-8903-0970d8a6f02e.png)
+![제목없음20](https://user-images.githubusercontent.com/42608068/96547181-9cf4d080-12e6-11eb-8c7e-c4f3af990598.png)
+
