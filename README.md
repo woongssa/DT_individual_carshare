@@ -387,4 +387,4 @@ kubectl delete -f dr-order.yaml
 
 
 
-## liveness Probe 설정
+## Liveness Probe 설정
