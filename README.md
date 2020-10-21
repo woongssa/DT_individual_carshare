@@ -359,10 +359,6 @@ kubectl label namespace carshare istio-injection=enabled
 * 키알리(kiali)화면에 서킷브레이커 동작 확인
 ![image](https://user-images.githubusercontent.com/70302900/96589002-46f04f00-131f-11eb-92b7-dd13ce203382.png)
 
-* Destinationrule을 제거 후 동일 부하 조건으로 정상 처리 확인
-```
-kubectl delete -f dr-order.yaml
-```
 
 ### 오토스케일 아웃
 앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다. 
