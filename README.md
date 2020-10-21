@@ -374,7 +374,7 @@ kubectl delete -f dr-order.yaml
 ![image](https://user-images.githubusercontent.com/42608068/96592628-8de04380-1323-11eb-8288-2288a9e189ec.png)
 - 오토스케일이 어떻게 되고 있는지 HPA 모니터링을 걸어둔다, 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다
 ![image](https://user-images.githubusercontent.com/16017769/96661016-17c0f880-1386-11eb-86a9-6788ba45bd1a.png)
-- kubectl get으로 HPA을 확인하면 CPU 사용률이 132%로 증가됐다.
+- kubectl get으로 HPA을 확인하면 CPU 사용률이 135%로 증가됐다.
 ![image](https://user-images.githubusercontent.com/16017769/96661066-30311300-1386-11eb-8d6c-7b6e2f67f83a.png)
 
 ## 무정지 재배포
