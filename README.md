@@ -178,7 +178,7 @@ spring:
 
 ## 폴리글랏 퍼시스턴스
 
-CQRS 를 위한 Mypage 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
+CQRS 를 위한 customerpage 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
 
 ```
 pom.xml 에 적용
