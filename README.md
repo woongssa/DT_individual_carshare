@@ -381,7 +381,8 @@ kubectl label namespace carshare istio-injection=enabled
 - CI/CD 파이프라인을 통해 새버전으로 재배포 작업함 Git hook 연동 설정되어 Github의 소스 변경 발생 시 자동 빌드 배포됨
 ![image](https://user-images.githubusercontent.com/16017769/96661148-5c4c9400-1386-11eb-8f4f-9b83cab19b8c.png)
 
-### Liveness Probe 설정
+
+## Liveness Probe
 - pod 삭제
 
 ![image](https://user-images.githubusercontent.com/16017769/96661174-6d95a080-1386-11eb-9f76-ab9a995c6286.png)
