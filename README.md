@@ -389,4 +389,94 @@ kubectl label namespace carshare istio-injection=enabled
 ![image](https://user-images.githubusercontent.com/16017769/96661206-81d99d80-1386-11eb-8b9d-539e36ef02e8.png)
 
 
+## ConfigMap 사용
+
+시스템별로 또는 운영중에 동적으로 변경 가능성이 있는 설정들을 ConfigMap을 사용하여 관리합니다.
+Application에서 특정 도메일 URL을 ConfigMap 으로 설정하여 운영/개발등 목적에 맞게 변경가능합니다.  
+
+* my-config.yaml
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+  namespace: carshare
+data:
+  api.payment.url: http://carsharepayment:8080
+```
+my-config라는 ConfigMap을 생성하고 key값에 도메인 url을 등록한다. 
+
+* ScreeningManage/buildsepc.yaml (configmap 사용)
+```
+ cat  <<EOF | kubectl apply -f -
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: $_PROJECT_NAME
+          namespace: $_NAMESPACE
+          labels:
+            app: $_PROJECT_NAME
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: $_PROJECT_NAME
+          template:
+            metadata:
+              labels:
+                app: $_PROJECT_NAME
+            spec:
+              containers:
+                - name: $_PROJECT_NAME
+                  image: $AWS_ACCOUNT_ID.dkr.ecr.$_AWS_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+                  ports:
+                    - containerPort: 8080
+                  env:
+                    - name: api.payment.url
+                      valueFrom:
+                        configMapKeyRef:
+                          name: my-config
+                          key: api.payment.url
+                  imagePullPolicy: Always
+                
+        EOF
+```
+Deployment yaml에 해단 configMap 적용
+
+* PaymentService.java
+```
+@FeignClient(name="payment", contextId = "payment", url="${api.payment.url}")
+public interface PaymentService {
+
+    @RequestMapping(method= RequestMethod.POST, path="/payments")
+    public void pay(@RequestBody Payment payment);
+
+}
+```
+url에 configMap 적용
+
+* kubectl describe pod carshareorder-9498f6bdc-qtclh  -n carshare
+```
+Containers:
+  carshareorder:
+    Container ID:   docker://8415f0125bac0264b5f77d14ed8ee7c28bc177e2cce9141a4c36e076c7920971
+    Image:          052937454741.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder:f8102f4078683bdbf345cc5cae7983b1cb8ea                                                                      668
+    Image ID:       docker-pullable://052937454741.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder@sha256:ebc8945df607                                                                      acc63d87e20d345e17245e3472fec43a9690e8ab9ca959573c9b
+    Port:           8080/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Tue, 01 Sep 2020 07:55:29 +0000
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:8080/actuator/health delay=120s timeout=2s period=5s #success=1 #failure=5
+    Readiness:      http-get http://:8080/actuator/health delay=30s timeout=2s period=5s #success=1 #failure=10
+    Environment:
+      api.payment.url:  <set to the key 'api.payment.url' of config map 'my-config'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-xw8ld (ro)
+
+```
+kubectl describe 명령으로 컨테이너에 configMap 적용여부를 알 수 있다. 
+
+
 
