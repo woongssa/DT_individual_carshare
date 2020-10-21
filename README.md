@@ -330,7 +330,6 @@ http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확�
 ## CI/CD 설정
 
 order에 대해 repository를 구성하였고, CI/CD플랫폼은 AWS의 CodeBuild를 사용했다.
-pipeline build script는 order의 buildspec.yml 에 포함되어있다.
 ![image](https://user-images.githubusercontent.com/70302900/96588525-b87bcd80-131e-11eb-90c8-8c4d1c4c1078.png)
 
 Git Hook 설정으로 연결된 GitHub의 소스 변경 발생 시 자동 배포된다.
