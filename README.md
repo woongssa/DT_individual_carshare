@@ -458,25 +458,29 @@ public interface PaymentService {
 ```
 url에 configMap 적용
 
-* kubectl describe pod carshareorder-9498f6bdc-qtclh  -n carshare
+* kubectl describe pod carshareorder-bdd8c8c4c-l52h6  -n carshare
 ```
 Containers:
   carshareorder:
-    Container ID:   docker://8415f0125bac0264b5f77d14ed8ee7c28bc177e2cce9141a4c36e076c7920971
-    Image:          052937454741.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder:f8102f4078683bdbf345cc5cae7983b1cb8ea                                                                      668
-    Image ID:       docker-pullable://052937454741.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder@sha256:ebc8945df607                                                                      acc63d87e20d345e17245e3472fec43a9690e8ab9ca959573c9b
+    Container ID:   docker://f3c983b12a4478f3b4a7ee5d7fea308638903eb62e0941edd33a3bce5f5f6513
+    Image:          496278789073.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder:9289bba10d5b0758ae9f6279d56ff77b818b8b63
+    Image ID:       docker-pullable://496278789073.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder@sha256:95395c95d1bc19ceae8eb5cc0b288b38dc439359a084610f328407dacd694a81
     Port:           8080/TCP
     Host Port:      0/TCP
     State:          Running
-      Started:      Tue, 01 Sep 2020 07:55:29 +0000
+      Started:      Wed, 21 Oct 2020 02:13:01 +0000
     Ready:          True
     Restart Count:  0
-    Liveness:       http-get http://:8080/actuator/health delay=120s timeout=2s period=5s #success=1 #failure=5
-    Readiness:      http-get http://:8080/actuator/health delay=30s timeout=2s period=5s #success=1 #failure=10
+    Limits:
+      cpu:  500m
+    Requests:
+      cpu:        200m
+    Liveness:     http-get http://:8080/ delay=120s timeout=2s period=5s #success=1 #failure=5
+    Readiness:    http-get http://:8080/ delay=30s timeout=2s period=5s #success=1 #failure=10
     Environment:
       api.payment.url:  <set to the key 'api.payment.url' of config map 'my-config'>  Optional: false
     Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from default-token-xw8ld (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5gx6w (ro)
 
 ```
 kubectl describe 명령으로 컨테이너에 configMap 적용여부를 알 수 있다. 
