@@ -8,7 +8,7 @@
  1. 배송관리 : https://github.com/woongssa/carShareDelivery.git
  1. 고객페이지 : https://github.com/woongssa/carShareStatusview.git
  1. 게이트웨이 : https://github.com/woongssa/carShareGateway.git
- 1. 프로덕트 : https://github.com/woongssa/carShareProduct.git
+ 1. 상품관리 : https://github.com/woongssa/carShareProduct.git
 
 # Table of contents
 
