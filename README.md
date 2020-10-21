@@ -389,10 +389,4 @@ kubectl label namespace carshare istio-injection=enabled
 ![image](https://user-images.githubusercontent.com/16017769/96661206-81d99d80-1386-11eb-8b9d-539e36ef02e8.png)
 
 
-## ConfigMap 사용
-
-
-
-
-
 
