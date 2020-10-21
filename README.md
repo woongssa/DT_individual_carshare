@@ -409,7 +409,7 @@ data:
 ```
 my-config라는 ConfigMap을 생성하고 key값에 도메인 url을 등록한다. 
 
-* ScreeningManage/buildsepc.yaml (configmap 사용)
+* carshareorder/buildsepc.yaml (configmap 사용)
 ```
  cat  <<EOF | kubectl apply -f -
         apiVersion: apps/v1
