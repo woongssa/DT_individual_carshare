@@ -378,22 +378,25 @@ kubectl delete -f dr-order.yaml
 ![image](https://user-images.githubusercontent.com/16017769/96661066-30311300-1386-11eb-8d6c-7b6e2f67f83a.png)
 
 ## 무정지 재배포
-- Readiness Probe 설정(buildspec.yml의 Readiness Probe 설정)
+- Readiness Probe 및 Liveness Probe 설정(buildspec.yml 설정)
 ![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
+
+### Readiness Probe 설정
 - CI/CD 파이프라인을 통해 새버전으로 재배포 작업함 Git hook 연동 설정되어 Github의 소스 변경 발생 시 자동 빌드 배포됨
 ![image](https://user-images.githubusercontent.com/16017769/96661148-5c4c9400-1386-11eb-8f4f-9b83cab19b8c.png)
+
+### Liveness Probe 설정
+- pod 삭제
+![image](https://user-images.githubusercontent.com/16017769/96661174-6d95a080-1386-11eb-9f76-ab9a995c6286.png)
+
+- 자동 생성된 pod 확인
+![image](https://user-images.githubusercontent.com/16017769/96661206-81d99d80-1386-11eb-8b9d-539e36ef02e8.png)
 
 
 ## ConfigMap 사용
 
 
 
-## Liveness Probe 설정
-- pod 삭제
-![image](https://user-images.githubusercontent.com/16017769/96661174-6d95a080-1386-11eb-9f76-ab9a995c6286.png)
-
-- 자동 생성된 pod 확인
-![image](https://user-images.githubusercontent.com/16017769/96661206-81d99d80-1386-11eb-8b9d-539e36ef02e8.png)
 
 
 
