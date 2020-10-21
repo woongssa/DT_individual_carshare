@@ -7,7 +7,7 @@
  1. 결제관리 : https://github.com/YoungDukGe1000Won/carSharePayment.git
  1. 배송관리 : https://github.com/YoungDukGe1000Won/carShareDelivery.git
  1. 고객페이지 : https://github.com/YoungDukGe1000Won/carShareStatusview.git
- 1. 게이트웨이 : https://github.com/byounghoonmoon/carShareGateway.git
+ 1. 게이트웨이 : https://github.com/YoungDukGe1000Won/carShareGateway.git
 
 
 # Table of contents
