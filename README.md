@@ -375,6 +375,7 @@ kubectl label namespace carshare istio-injection=enabled
 
 ## 무정지 재배포
 - Readiness Probe 및 Liveness Probe 설정(buildspec.yml 설정)
+
 ![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
 
 ### Readiness Probe 설정
