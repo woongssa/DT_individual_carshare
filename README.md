@@ -1,14 +1,14 @@
-# DT_6th_team5_carShare (자동차 공유 서비스)
+# DT개인과제_carShare (자동차 공유 서비스)
 
-5팀 자동차 공유 서비스 CNA개발 실습을 위한 프로젝트
+5팀 자동차 공유 서비스 CNA개발에 Product 서비스 추가함
 
 # 구현 Repository
- 1. 접수관리 : https://github.com/YoungDukGe1000Won/carShareOrder.git
- 1. 결제관리 : https://github.com/YoungDukGe1000Won/carSharePayment.git
- 1. 배송관리 : https://github.com/YoungDukGe1000Won/carShareDelivery.git
- 1. 고객페이지 : https://github.com/YoungDukGe1000Won/carShareStatusview.git
- 1. 게이트웨이 : https://github.com/YoungDukGe1000Won/carShareGateway.git
-
+ 1. 접수관리 : https://github.com/woongssa/carShareOrder.git
+ 1. 결제관리 : https://github.com/woongssa/carSharePayment.git
+ 1. 배송관리 : https://github.com/woongssa/carShareDelivery.git
+ 1. 고객페이지 : https://github.com/woongssa/carShareStatusview.git
+ 1. 게이트웨이 : https://github.com/woongssa/carShareGateway.git
+ 1. 프로덕트 : https://github.com/woongssa/carShareProduct.git
 
 # Table of contents
 
