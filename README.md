@@ -372,8 +372,10 @@ kubectl delete -f dr-order.yaml
 
 - replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 5프로를 넘어서면 replica 를 10개까지 늘려준다:
 ![image](https://user-images.githubusercontent.com/42608068/96592628-8de04380-1323-11eb-8288-2288a9e189ec.png)
-오토스케일 적용 내용
-![image](https://user-images.githubusercontent.com/42608068/96592446-5d000e80-1323-11eb-8eeb-0fd2e12fcd5f.png)
+- 오토스케일이 어떻게 되고 있는지 HPA 모니터링을 걸어둔다:
+![image](https://user-images.githubusercontent.com/16017769/96661016-17c0f880-1386-11eb-86a9-6788ba45bd1a.png)
+- 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다:
+![image](https://user-images.githubusercontent.com/16017769/96661066-30311300-1386-11eb-8d6c-7b6e2f67f83a.png)
 
 ## 무정지 재배포
 - Readiness Probe 설정(buildspec.yml의 Readiness Probe 설정)
