@@ -134,8 +134,8 @@
 ## 시나리오 테스트결과
 | 기능 | 이벤트 Payload |
 |---|:---:|
-| 1.고객이 공유차 렌탈을 접수한다.</br>2. 결제가 정상적으로 완료되면 접수가 진행된다. (Sync)</br>3.접수가 완료되면 배송이 시작된다. (Async)</br>3.배송이 시작되면 접수정보의 상태를 변경한다. (Async)|![제목없음21](https://user-images.githubusercontent.com/42608068/96580615-831db280-1313-11eb-930e-be9b41b256ad.png)|
-| 4.고객이 공유차 렌탈을 취소한다.</br>5. 배송 취소가 정상적으로 완료되면 결제 취소가 진행된다. (Sync)</br>6.결제 취소도 정상적으로 이어지면 접수가 최종적으로 취소된다. (Async)|![제목없음21](https://user-images.githubusercontent.com/42608068/96580830-d7289700-1313-11eb-985b-aa1036db3e57.png)|
+| 1.고객이 공유차 렌탈을 접수한다.</br>2. 결제가 정상적으로 완료되면 접수가 진행된다. (Sync)</br>3.접수가 완료되면 배송이 시작되고 상품의 갯수정보가 변경된다. (Async)</br>3.배송이 시작되면 접수정보의 상태를 변경한다. (Async)|![제목없음21](https://user-images.githubusercontent.com/42608068/96580615-831db280-1313-11eb-930e-be9b41b256ad.png)|
+| 4.고객이 공유차 렌탈을 취소한다.</br>5. 배송 취소가 정상적으로 완료되면 결제 취소가 진행된다. (Sync)</br>6.결제 취소도 정상적으로 이어지면 접수가 취소되고 상품의 갯수정보가 증가한다. (Async)|![제목없음21](https://user-images.githubusercontent.com/42608068/96580830-d7289700-1313-11eb-985b-aa1036db3e57.png)|
 | 7.고객이 접수 상태를 조회한다.|![제목없음21](https://user-images.githubusercontent.com/42608068/96581350-a5640000-1314-11eb-8336-0474e2d1716b.png)|
 
 ## DDD 의 적용
@@ -330,7 +330,6 @@ mvn spring-boot:run
 http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확인
 ```
 
-[ 개인과제 추가 ]
 주문/주문취소가 이루어진 후에 상품 서비스로 이를 알려주는 행위는 동기식이 아니라 비동기식으로 처리하여 상품 시스템의 처리를 위해 주문이 블로킹되지 않도록 처리한다.
  
 - 이를 위하여 주문이력 기록을 남긴 후에 곧바로 주문승인이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
@@ -398,30 +397,34 @@ public class PolicyHandler{
 #서비스 정상 유무 확인을 위해 상품(product)을 등록함 
 http localhost:8085/products modelname="test1" qty=100
 http localhost:8085/products modelname="test2" qty=200
-
+```
 ![image](https://user-images.githubusercontent.com/70302882/96801988-dabb3b80-1443-11eb-8fd2-0555f22bc44e.png)
 
+```
 #상품(product) 서비스를 잠시 내려놓음 (ctrl+c)
 
 #주문접수요청 처리
 http localhost:8081/orders productId=1 qty=1   #Success
 http localhost:8081/orders productId=2 qty=2   #Success
-
+```
 ![image](https://user-images.githubusercontent.com/70302882/96801462-9e3b1000-1442-11eb-8534-fbbec827129b.png)
 ![image](https://user-images.githubusercontent.com/70302882/96801584-e4906f00-1442-11eb-931f-44cf5009eba7.png)
 
+```
 #주문상태 확인
 http localhost:8081/orders     # 주문정상처리
-
+```
 ![image](https://user-images.githubusercontent.com/70302882/96801640-0db0ff80-1443-11eb-943f-5bbd5a6ba2bb.png)
 
-
+```
 #상품 서비스 기동
 cd carshareproduct
 mvn spring-boot:run
 
 #상품 ID 1, 2의 수량확인
 http localhost:8085/products     # 수량이 변경됨을 확인
+```
+
 ![image](https://user-images.githubusercontent.com/70302882/96802614-2b7f6400-1445-11eb-9560-11d4bfe36c41.png)
 
 ```
