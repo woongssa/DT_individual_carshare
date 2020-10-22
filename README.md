@@ -470,7 +470,7 @@ kubectl label namespace carshare istio-injection=enabled --overwrite
 - replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 5프로를 넘어서면 replica 를 10개까지 늘려준다
 ![image](https://user-images.githubusercontent.com/70302882/96833288-250bdf00-147b-11eb-8788-d2e37fe7788e.png)
 - 오토스케일이 어떻게 되고 있는지 HPA 모니터링을 걸어둔다, 어느정도 시간이 흐른 후, 스케일 아웃이 벌어지는 것을 확인할 수 있다
-![image](https://user-images.githubusercontent.com/70302882/96832930-8aab9b80-147a-11eb-8c60-9c08b7bd8e07.png)
+![image](https://user-images.githubusercontent.com/70302882/96834603-3a820880-147d-11eb-9cbb-00e1046a4dca.png)
 - kubectl get으로 HPA을 확인하면 CPU 사용률이 135%로 증가됐다.
 ![image](https://user-images.githubusercontent.com/70302882/96833158-eb3ad880-147a-11eb-8daf-c91292a08b89.png)
 
