@@ -468,31 +468,22 @@ kubectl label namespace carshare istio-injection=enabled --overwrite
 ![image](https://user-images.githubusercontent.com/70302882/96832121-348a2880-1479-11eb-9ceb-1ae362dae1de.png)
 
 - replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 5프로를 넘어서면 replica 를 10개까지 늘려준다
-![image](https://user-images.githubusercontent.com/70302882/96832514-d742a700-1479-11eb-8163-47c233123cd2.png)
+![image](https://user-images.githubusercontent.com/70302882/96833288-250bdf00-147b-11eb-8788-d2e37fe7788e.png)
 - 오토스케일이 어떻게 되고 있는지 HPA 모니터링을 걸어둔다, 어느정도 시간이 흐른 후, 스케일 아웃이 벌어지는 것을 확인할 수 있다
 ![image](https://user-images.githubusercontent.com/70302882/96832930-8aab9b80-147a-11eb-8c60-9c08b7bd8e07.png)
 - kubectl get으로 HPA을 확인하면 CPU 사용률이 135%로 증가됐다.
-![image](https://user-images.githubusercontent.com/16017769/96661066-30311300-1386-11eb-8d6c-7b6e2f67f83a.png)
+![image](https://user-images.githubusercontent.com/70302882/96833158-eb3ad880-147a-11eb-8daf-c91292a08b89.png)
 
 ## 무정지 재배포
 - Readiness Probe 및 Liveness Probe 설정(buildspec.yml 설정)
 
 ![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
 
-### Readiness Probe 설정
-- CI/CD 파이프라인을 통해 새버전으로 재배포 작업함 Git hook 연동 설정되어 Github의 소스 변경 발생 시 자동 빌드 배포됨
-![image](https://user-images.githubusercontent.com/16017769/96661148-5c4c9400-1386-11eb-8f4f-9b83cab19b8c.png)
+### Readiness Probe / Liveness Probe 설정
 
+![image](https://user-images.githubusercontent.com/70302882/96833380-4a98e880-147b-11eb-8202-f893c7f83113.png)
 
-## Liveness Probe
-- pod 삭제
-
-![image](https://user-images.githubusercontent.com/16017769/96661174-6d95a080-1386-11eb-9f76-ab9a995c6286.png)
-
-- 자동 생성된 pod 확인
-
-![image](https://user-images.githubusercontent.com/16017769/96661206-81d99d80-1386-11eb-8b9d-539e36ef02e8.png)
-
+## Liveness Probe 확인
 
 ## ConfigMap 사용
 
@@ -546,45 +537,9 @@ my-config라는 ConfigMap을 생성하고 key값에 도메인 url을 등록한�
                 
         EOF
 ```
-Deployment yaml에 해단 configMap 적용
 
-* PaymentService.java
-```
-@FeignClient(name="payment", contextId = "payment", url="${api.payment.url}")
-public interface PaymentService {
-
-    @RequestMapping(method= RequestMethod.POST, path="/payments")
-    public void pay(@RequestBody Payment payment);
-
-}
-```
 url에 configMap 적용
 
-* kubectl describe pod carshareorder-bdd8c8c4c-l52h6  -n carshare
-```
-Containers:
-  carshareorder:
-    Container ID:   docker://f3c983b12a4478f3b4a7ee5d7fea308638903eb62e0941edd33a3bce5f5f6513
-    Image:          496278789073.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder:9289bba10d5b0758ae9f6279d56ff77b818b8b63
-    Image ID:       docker-pullable://496278789073.dkr.ecr.ap-southeast-2.amazonaws.com/carshareorder@sha256:95395c95d1bc19ceae8eb5cc0b288b38dc439359a084610f328407dacd694a81
-    Port:           8080/TCP
-    Host Port:      0/TCP
-    State:          Running
-      Started:      Wed, 21 Oct 2020 02:13:01 +0000
-    Ready:          True
-    Restart Count:  0
-    Limits:
-      cpu:  500m
-    Requests:
-      cpu:        200m
-    Liveness:     http-get http://:8080/ delay=120s timeout=2s period=5s #success=1 #failure=5
-    Readiness:    http-get http://:8080/ delay=30s timeout=2s period=5s #success=1 #failure=10
-    Environment:
-      api.payment.url:  <set to the key 'api.payment.url' of config map 'my-config'>  Optional: false
-    Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5gx6w (ro)
-
-```
 kubectl describe 명령으로 컨테이너에 configMap 적용여부를 알 수 있다. 
 
 
