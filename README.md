@@ -474,10 +474,6 @@ kubectl label namespace carshare istio-injection=enabled --overwrite
 - kubectl get으로 HPA을 확인하면 CPU 사용률이 135%로 증가됐다.
 ![image](https://user-images.githubusercontent.com/70302882/96833158-eb3ad880-147a-11eb-8daf-c91292a08b89.png)
 
-## 무정지 재배포
-- Readiness Probe 및 Liveness Probe 설정(buildspec.yml 설정)
-
-![image](https://user-images.githubusercontent.com/42608068/96593140-24146980-1324-11eb-88d5-7dee61001832.png)
 
 ### Readiness Probe / Liveness Probe 설정
 
