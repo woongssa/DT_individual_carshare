@@ -43,6 +43,7 @@
     1. 결제가 되지 않은 주문건은 아예 접수가 성립되지 않아야 한다(Sync 호출)
 1. 장애격리
     1. 배송관리 기능이 수행되지 않더라도 접수는 정상적으로 처리 가능하다(Async(event-driven), Eventual Consistency)
+    1. 상품관리 기능이 수행되지 않더라도 접수는 정상적으로 처리 가능하다(Async(event-driven), Eventual Consistency)
     1. 접수시스템이 과중되면 사용자를 잠시동안 받지 않고 결제를 잠시후에 하도록 유도한다(Circuit breaker, fallback)
 1. 성능
     1. 고객이 본인의 렌탈 상태 및 이력을 접수시스템에서 확인할 수 있어야 한다(CQRS)
@@ -60,7 +61,7 @@
 
 ## 이벤트스토밍
 * MSAEz 로 모델링한 이벤트스토밍 결과:  
-![image](https://user-images.githubusercontent.com/42608068/96539757-c9085580-12d6-11eb-8721-8bb7e0601d53.png)
+![image](https://user-images.githubusercontent.com/70302882/96803494-769a7680-1447-11eb-877d-74d45375067b.png)
 
 ### 이벤트 도출 
 ![제목 없음1](https://user-images.githubusercontent.com/42608068/96541160-60bb7300-12da-11eb-8eda-4beb637fa24f.png)
@@ -365,7 +366,7 @@ public class PolicyHandler{
             if(optional.isPresent()) {
                 product = optional.get();
                 product.setId(ordered.getProductId());
-                product.setQty((product.getQty() != null ? product.getQty().intValue() - 1 : 0));
+                product.setQty((product.getQty() != null ? product.getQty().intValue() - ordered.getQty() : 0));
                 productRepository.save(product);
 
             }
@@ -380,7 +381,7 @@ public class PolicyHandler{
             if(optional.isPresent()) {
                 product = optional.get();
                 product.setId(orderCancelled.getProductId());
-                product.setQty(product.getQty() != null ? product.getQty().intValue() + 1 : 0);
+                product.setQty(product.getQty() != null ? product.getQty().intValue() + orderCancelled.getQty() : 0);
                 productRepository.save(product);
 
             }
