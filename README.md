@@ -437,47 +437,38 @@ http localhost:8085/products     # 수량이 변경됨을 확인
 
 # 운영
 
-## CI/CD 설정
-
-order에 대해 repository를 구성하였고, CI/CD플랫폼은 AWS의 CodeBuild를 사용했다.
-![image](https://user-images.githubusercontent.com/70302900/96588525-b87bcd80-131e-11eb-90c8-8c4d1c4c1078.png)
-
-Git Hook 설정으로 연결된 GitHub의 소스 변경 발생 시 자동 배포된다.
-![image](https://user-images.githubusercontent.com/70302900/96588864-19a3a100-131f-11eb-8b72-846538a6ae42.png)
-
-
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
 
 ### 서킷 브레이킹 istio-injection + DestinationRule
 
 * istio-injection 적용 (기 적용완료)
 ```
-kubectl label namespace carshare istio-injection=enabled 
+kubectl label namespace carshare istio-injection=enabled --overwrite
 ```
 
 * 서킷 브레이커 pending time 설정
-![image](https://user-images.githubusercontent.com/70302900/96588904-27592680-131f-11eb-94dc-2b61b67c3ce2.png)
+![image](https://user-images.githubusercontent.com/70302882/96831573-47e8c400-1478-11eb-9d23-85f6f714da88.png)
 
 * 부하테스트 툴(Siege) 설치 및 Product 서비스 Load Testing 
-  - 동시 사용자 5명
+  - 동시 사용자 100명
   - 2초 실행 
  
-![image](https://user-images.githubusercontent.com/70302900/96588949-38099c80-131f-11eb-9e37-5f1846fca268.png)
-
+![image](https://user-images.githubusercontent.com/70302882/96831660-677fec80-1478-11eb-8468-64f585a584c0.png)
+![image](https://user-images.githubusercontent.com/70302882/96831693-75ce0880-1478-11eb-8a88-70e979890004.png)
 
 * 키알리(kiali)화면에 서킷브레이커 동작 확인
 
-![image](https://user-images.githubusercontent.com/70302900/96589002-46f04f00-131f-11eb-92b7-dd13ce203382.png)
+![image](https://user-images.githubusercontent.com/70302882/96831833-b62d8680-1478-11eb-8fa1-85e5884540c5.png)
 
 
 ### 오토스케일 아웃
 앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다. 
 
 - Deployment 배포시 resource 설정 적용
-![image](https://user-images.githubusercontent.com/42608068/96592913-e44d8200-1323-11eb-8d94-386116ecaf2c.png)
+![image](https://user-images.githubusercontent.com/70302882/96832121-348a2880-1479-11eb-9ceb-1ae362dae1de.png)
 
 - replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 5프로를 넘어서면 replica 를 10개까지 늘려준다
-![image](https://user-images.githubusercontent.com/42608068/96592628-8de04380-1323-11eb-8288-2288a9e189ec.png)
+![image](https://user-images.githubusercontent.com/70302882/96832514-d742a700-1479-11eb-8163-47c233123cd2.png)
 - 오토스케일이 어떻게 되고 있는지 HPA 모니터링을 걸어둔다, 어느정도 시간이 흐른 후, 스케일 아웃이 벌어지는 것을 확인할 수 있다
 ![image](https://user-images.githubusercontent.com/16017769/96661016-17c0f880-1386-11eb-86a9-6788ba45bd1a.png)
 - kubectl get으로 HPA을 확인하면 CPU 사용률이 135%로 증가됐다.
