@@ -139,7 +139,7 @@
 | 7.고객이 접수 상태를 조회한다.|![제목없음21](https://user-images.githubusercontent.com/42608068/96581350-a5640000-1314-11eb-8336-0474e2d1716b.png)|
 
 ## DDD 의 적용
-분석/설계 단계에서 도출된 MSA는 총 5개로 아래와 같다.
+분석/설계 단계에서 도출된 MSA는 총 6개로 아래와 같다.
 * customerpage 는 CQRS 를 위한 서비스
 
 | MSA | 기능 | port | 조회 API | Gateway 사용시 |
@@ -148,6 +148,7 @@
 | delivery | 배송 관리 | 8082 | http://localhost:8082/deliveries | http://carsharedelivery:8080/deliveries |
 | customerpage | 상태 조회 | 8083 | http://localhost:8083/customerpages | http://carsharestatusview:8080/customerpages |
 | payment | 결제 관리 | 8084 | http://localhost:8084/payments | http://carsharepayment:8080/payments |
+| product | 상품 관리 | 8085 | http://localhost:8085/products | http://carshareproduct:8080/products |
 
 ## Gateway 적용
 
@@ -160,7 +161,7 @@ spring:
         - id: order
           uri: http://carshareorder:8080
           predicates:
-            - Path=/orders/** 
+            - Path=/orders/**
         - id: delivery
           uri: http://carsharedelivery:8080
           predicates:
@@ -173,12 +174,16 @@ spring:
           uri: http://carsharepayment:8080
           predicates:
             - Path=/payments/**,/paymentCancellations/**
+        - id: product
+          uri: http://carshareproduct:8080
+          predicates:
+            - Path=/products/** 
 ```
 
 
 ## 폴리글랏 퍼시스턴스
 
-CQRS 를 위한 customerpage 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
+CQRS 를 위한 customerpage 서비스, Product 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
 
 ```
 pom.xml 에 적용
@@ -261,7 +266,7 @@ http localhost:8081/orders productId=1002 qty=3 status="order"   #Success
 결제가 이루어진 후에 배송 서비스로 이를 알려주는 행위는 동기식이 아니라 비동기식으로 처리하여 배송 시스템의 처리를 위해 결제가 블로킹되지 않도록 처리한다.
  
 - 이를 위하여 결제이력 기록을 남긴 후에 곧바로 결제승인이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
- 
+
 ```
 package carshare;
 
@@ -324,6 +329,103 @@ mvn spring-boot:run
 #접수상태 확인
 http localhost:8081/orders     # 접수상태가 "shipped(배송됨)"으로 확인
 ```
+
+[ 개인과제 추가 ]
+주문/주문취소가 이루어진 후에 상품 서비스로 이를 알려주는 행위는 동기식이 아니라 비동기식으로 처리하여 상품 시스템의 처리를 위해 주문이 블로킹되지 않도록 처리한다.
+ 
+- 이를 위하여 주문이력 기록을 남긴 후에 곧바로 주문승인이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
+
+```
+    @PostPersist
+    public void onPostPersist(){
+        Ordered ordered = new Ordered();
+        BeanUtils.copyProperties(this, ordered);
+        ordered.publishAfterCommit();
+
+    }
+```
+- 상품 서비스에서는 주문승인 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다
+
+```
+@Service
+public class PolicyHandler{
+    @StreamListener(KafkaProcessor.INPUT)
+    public void onStringEventListener(@Payload String eventString){
+
+    }
+    @Autowired
+    ProductRepository productRepository;
+
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverOrdered_Productchange(@Payload Ordered ordered){
+
+        if(ordered.isMe()){
+            Product product = null;
+            Optional<Product> optional = productRepository.findById(ordered.getProductId());
+            if(optional.isPresent()) {
+                product = optional.get();
+                product.setId(ordered.getProductId());
+                product.setQty((product.getQty() != null ? product.getQty().intValue() - 1 : 0));
+                productRepository.save(product);
+
+            }
+        }
+    }
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverOrderCancelled_Productchange(@Payload OrderCancelled orderCancelled){
+
+        if(orderCancelled.isMe()){
+            Product product = null;
+            Optional<Product> optional = productRepository.findById(orderCancelled.getProductId());
+            if(optional.isPresent()) {
+                product = optional.get();
+                product.setId(orderCancelled.getProductId());
+                product.setQty(product.getQty() != null ? product.getQty().intValue() + 1 : 0);
+                productRepository.save(product);
+
+            }
+        }
+    }
+
+}
+
+```
+
+상품 서비스는 주문신청/취소 서비스와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 상품 서비스가 유지보수로 인해 잠시 내려간 상태라도 주문신청/취소을 받는데 문제가 없다.
+
+```
+#서비스 정상 유무 확인을 위해 상품(product)을 등록함 
+http localhost:8085/products modelname="test1" qty=100
+http localhost:8085/products modelname="test2" qty=200
+
+![image](https://user-images.githubusercontent.com/70302882/96801988-dabb3b80-1443-11eb-8fd2-0555f22bc44e.png)
+
+#상품(product) 서비스를 잠시 내려놓음 (ctrl+c)
+
+#주문접수요청 처리
+http localhost:8081/orders productId=1 qty=1   #Success
+http localhost:8081/orders productId=2 qty=2   #Success
+
+![image](https://user-images.githubusercontent.com/70302882/96801462-9e3b1000-1442-11eb-8534-fbbec827129b.png)
+![image](https://user-images.githubusercontent.com/70302882/96801584-e4906f00-1442-11eb-931f-44cf5009eba7.png)
+
+#주문상태 확인
+http localhost:8081/orders     # 주문정상처리
+
+![image](https://user-images.githubusercontent.com/70302882/96801640-0db0ff80-1443-11eb-943f-5bbd5a6ba2bb.png)
+
+
+#상품 서비스 기동
+cd carshareproduct
+mvn spring-boot:run
+
+#상품 ID 1, 2의 수량확인
+http localhost:8085/products     # 수량이 변경됨을 확인
+![image](https://user-images.githubusercontent.com/70302882/96802614-2b7f6400-1445-11eb-9560-11d4bfe36c41.png)
+
+```
+
 
 # 운영
 
