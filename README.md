@@ -401,34 +401,38 @@ http localhost:8085/products modelname="test2" qty=200
 ```
 ![image](https://user-images.githubusercontent.com/70302882/96801988-dabb3b80-1443-11eb-8fd2-0555f22bc44e.png)
 
-```
+
 #상품(product) 서비스를 잠시 내려놓음 (ctrl+c)
 
 #주문접수요청 처리
+```
 http localhost:8081/orders productId=1 qty=1   #Success
 http localhost:8081/orders productId=2 qty=2   #Success
 ```
 ![image](https://user-images.githubusercontent.com/70302882/96801462-9e3b1000-1442-11eb-8534-fbbec827129b.png)
 ![image](https://user-images.githubusercontent.com/70302882/96801584-e4906f00-1442-11eb-931f-44cf5009eba7.png)
 
-```
+
 #주문상태 확인
+```
 http localhost:8081/orders     # 주문정상처리
 ```
 ![image](https://user-images.githubusercontent.com/70302882/96801640-0db0ff80-1443-11eb-943f-5bbd5a6ba2bb.png)
 
-```
+
 #상품 서비스 기동
+```
 cd carshareproduct
 mvn spring-boot:run
-
+```
 #상품 ID 1, 2의 수량확인
+```
 http localhost:8085/products     # 수량이 변경됨을 확인
 ```
 
 ![image](https://user-images.githubusercontent.com/70302882/96802614-2b7f6400-1445-11eb-9560-11d4bfe36c41.png)
 
-```
+
 
 
 # 운영
@@ -454,14 +458,15 @@ kubectl label namespace carshare istio-injection=enabled
 * 서킷 브레이커 pending time 설정
 ![image](https://user-images.githubusercontent.com/70302900/96588904-27592680-131f-11eb-94dc-2b61b67c3ce2.png)
 
-
-* 부하테스트 툴(Siege) 설치 및 Order 서비스 Load Testing 
+* 부하테스트 툴(Siege) 설치 및 Product 서비스 Load Testing 
   - 동시 사용자 5명
   - 2초 실행 
+ 
 ![image](https://user-images.githubusercontent.com/70302900/96588949-38099c80-131f-11eb-9e37-5f1846fca268.png)
 
 
 * 키알리(kiali)화면에 서킷브레이커 동작 확인
+
 ![image](https://user-images.githubusercontent.com/70302900/96589002-46f04f00-131f-11eb-92b7-dd13ce203382.png)
 
 
